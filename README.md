@@ -15,7 +15,7 @@ The `returncheck.Analyzer` variable follows guidelines in the golang.org/x/tools
 
 # Motivation
 
-In Go, functions that have no side-effects (so-called pure functions) can be called without storing or otherwise using their return values. This is almost always a bug. Other functions have side side-effects but also return values in which the caller should take careful interest. Accidentally disregarding these values _might_ be a bug. A common example is functions that return an updated value rather than mutating the original value.
+In Go, functions that have no side-effects (so-called pure functions) can be called without storing or otherwise using their return values. This is almost always a bug. Other functions have side side-effects but also return values in which the caller should take careful interest. Accidentally disregarding these values _might_ be a bug. A common example of the former case is functions that return an updated value rather than mutating the original value.
 
 ```go
 import (
