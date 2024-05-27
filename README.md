@@ -1,13 +1,15 @@
 # go-returncheck
-Go analyzer that requires return values be used or explicitly ignored with `_`.
+Go analyzer that requires function return values be used or explicitly ignored with `_`.
 
 NOTE: This project is in active development. Documentation will not accurately reflect feature support until the first release.
 
 # Usage
 
+```shell
 go install github.com/navijation/go-returncheck/cmd/returncheck@latest
 
 returncheck [flags] [packages]
+```
 
 The `returncheck.Analyzer` variable follows guidelines in the golang.org/x/tools/go/analysis package. This should make it possible to integrate returncheck with your own analysis driver program.
 
