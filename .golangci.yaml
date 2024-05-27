@@ -1,0 +1,16 @@
+linters:
+  enable:
+    - exhaustruct
+    - exhaustive
+
+linters-settings:
+  exhaustive:
+    check:
+      - switch
+      - map
+    explicit-exhaustive-switch: true
+    explicit-exhaustive-map: true
+  exhaustruct:
+    include:
+      - 'x^'  # enforce nothing without explicit comment directive
+
