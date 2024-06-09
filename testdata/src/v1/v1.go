@@ -18,6 +18,9 @@ func computeSquaredDistance(dx, dy int) int {
 	return dx*dx + dy*dy
 }
 
+func returnsNoValues() {
+}
+
 func SpecialSumOfDistances(target point.Point, points []point.Point) float64 {
 	var out float64
 	target.Unpack()              // want `RETC1: return values for function call target.Unpack() are ignored`
@@ -57,6 +60,7 @@ func (me *Handler) HandleRequest(req HandlerRequest) HandlerResponse {
 	defer me.emit("Handled request")              // don't complain if return value is ignored in `defer` call
 	output := SpecialSumOfDistances(req.Target, req.Others)
 	output = SpecialSumOfDistances(req.Target, req.Others)
+	returnsNoValues()
 	_ = output
 	return HandlerResponse{
 		DistanceSum: output,
