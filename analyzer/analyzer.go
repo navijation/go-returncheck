@@ -33,12 +33,12 @@ func run(pass *analysis.Pass) (interface{}, error) {
 			switch expr := stmt.X.(type) {
 			case *ast.CallExpr:
 				// Report the standalone function call
-				pass.Reportf(expr.Pos(), "standalone function call found: %s", pass.Fset.Position(expr.Pos()))
+    				pass.Reportf(callExpr.Pos(), "RETC1: return value for function call %s is ignored", callExpr.Sel.Name)
 			case *ast.SelectorExpr:
 				// Check if the selector expression's X is a call expression
 				if _, ok := expr.X.(*ast.CallExpr); ok {
 					// Report the standalone function call in the selector
-					pass.Reportf(expr.Pos(), "standalone function call found in selector: %s", pass.Fset.Position(expr.Pos()))
+					pass.Reportf(callExpr.Pos(), "RETC1: return value for function call %s is ignored", callExpr.Sel.Name)
 				}
 			}
 		}
