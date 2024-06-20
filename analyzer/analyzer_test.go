@@ -9,7 +9,7 @@ import (
 	"golang.org/x/tools/go/analysis/analysistest"
 )
 
-var testdataPath, _ = filepath.Abs("./testdata/") //nolint:gochecknoglobals
+var testdataPath, _ = filepath.Abs("../testdata/") //nolint:gochecknoglobals
 
 func TestAnalyzer(t *testing.T) {
 	t.Parallel()
