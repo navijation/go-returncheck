@@ -1,10 +1,12 @@
 package analyzer
 
 import (
+	"fmt"
 	"go/ast"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/inspect"
 	"golang.org/x/tools/go/ast/inspector"
+	"strings"
 )
 
 // NewAnalyzer returns a new analyzer.
@@ -33,12 +35,12 @@ func run(pass *analysis.Pass) (interface{}, error) {
 			switch expr := stmt.X.(type) {
 			case *ast.CallExpr:
 				// Report the standalone function call
-				pass.Reportf(expr.Pos(), "RETC1: return value for function call %s is ignored", formatNode(pass, expr))
+				pass.Reportf(expr.Pos(), "RETC1: return value for function call %s is ignored", functionName(expr))
 			case *ast.SelectorExpr:
 				// Check if the selector expression's X is a call expression
 				if callExpr, ok := expr.X.(*ast.CallExpr); ok {
 					// Report the standalone function call in the selector
-					pass.Reportf(callExpr.Pos(), "RETC1: return value for function call %s is ignored", formatNode(pass, callExpr))
+					pass.Reportf(callExpr.Pos(), "RETC1: return value for function call %s is ignored", functionName(callExpr))
 				}
 			}
 		}
@@ -47,7 +49,24 @@ func run(pass *analysis.Pass) (interface{}, error) {
 	return nil, nil
 }
 
-// formatNode formats the given AST node as a string.
-func formatNode(pass *analysis.Pass, node ast.Node) string {
-	return pass.Fset.Position(node.Pos()).String()
+// functionName extracts the name of the function from a CallExpr.
+func functionName(call *ast.CallExpr) string {
+	switch fun := call.Fun.(type) {
+	case *ast.Ident:
+		return fun.Name
+	case *ast.SelectorExpr:
+		return fmt.Sprintf("%s.%s", selectorName(fun.X), fun.Sel.Name)
+	}
+	return ""
+}
+
+// selectorName returns the name of a selector's base.
+func selectorName(expr ast.Expr) string {
+	switch e := expr.(type) {
+	case *ast.Ident:
+		return e.Name
+	case *ast.SelectorExpr:
+		return fmt.Sprintf("%s.%s", selectorName(e.X), e.Sel.Name)
+	}
+	return ""
 }
