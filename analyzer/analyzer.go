@@ -33,16 +33,21 @@ func run(pass *analysis.Pass) (interface{}, error) {
 			switch expr := stmt.X.(type) {
 			case *ast.CallExpr:
 				// Report the standalone function call
-    				pass.Reportf(callExpr.Pos(), "RETC1: return value for function call %s is ignored", callExpr.Sel.Name)
+				pass.Reportf(expr.Pos(), "RETC1: return value for function call %s is ignored", formatNode(pass, expr))
 			case *ast.SelectorExpr:
 				// Check if the selector expression's X is a call expression
-				if _, ok := expr.X.(*ast.CallExpr); ok {
+				if callExpr, ok := expr.X.(*ast.CallExpr); ok {
 					// Report the standalone function call in the selector
-					pass.Reportf(callExpr.Pos(), "RETC1: return value for function call %s is ignored", callExpr.Sel.Name)
+					pass.Reportf(callExpr.Pos(), "RETC1: return value for function call %s is ignored", formatNode(pass, callExpr))
 				}
 			}
 		}
 	})
 
 	return nil, nil
+}
+
+// formatNode formats the given AST node as a string.
+func formatNode(pass *analysis.Pass, node ast.Node) string {
+	return pass.Fset.Position(node.Pos()).String()
 }
