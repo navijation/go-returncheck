@@ -75,7 +75,7 @@ func functionName(call *ast.CallExpr) string {
 	case *ast.Ident:
 		return fun.Name + "()"
 	case *ast.SelectorExpr:
-		return fmt.Sprintf("%s.%s()", exprString(fun.X), fun.Sel.Name)
+		return fmt.Sprintf("%s.%s", exprString(fun.X), fun.Sel.Name)
 	}
 	return ""
 }
@@ -87,7 +87,7 @@ func exprString(expr ast.Expr) string {
 	case *ast.SelectorExpr:
 		return fmt.Sprintf("%s.%s", exprString(e.X), e.Sel.Name)
 	case *ast.CallExpr:
-		return fmt.Sprintf("%s()", functionName(e))
+		return fmt.Sprintf("%s", functionName(e))
 	}
 	return ""
 }
