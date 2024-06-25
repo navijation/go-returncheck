@@ -55,10 +55,17 @@ func run(pass *analysis.Pass) (interface{}, error) {
 }
 
 func returnsValues(pass *analysis.Pass, call *ast.CallExpr) bool {
-	if t, ok := pass.TypesInfo.Types[call]; ok {
-		return t.Type != types.Typ[types.Invalid] && t.Type != nil
-	}
-	return false
+    if t, ok := pass.TypesInfo.Types[call]; ok {
+        switch typ := t.Type.(type) {
+        case *types.Tuple:
+            return typ.Len() > 0
+        case *types.Named, *types.Struct, *types.Basic, *types.Pointer, *types.Interface:
+            return true
+        case *types.Signature:
+            return typ.Results().Len() > 0
+        }
+    }
+    return false
 }
 
 func hasMultipleReturnValues(pass *analysis.Pass, call *ast.CallExpr) bool {
